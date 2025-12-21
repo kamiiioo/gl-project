@@ -1,1 +1,1 @@
-# gl-project
+# thegl-project
