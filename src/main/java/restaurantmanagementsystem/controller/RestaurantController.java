@@ -1,13 +1,21 @@
 package restaurantmanagementsystem.controller;
 import java.util.Scanner;
+import restaurantmanagementsystem.model.MenuComponent;
+import restaurantmanagementsystem.model.Order;
+import restaurantmanagementsystem.service.CardPayment;
+import restaurantmanagementsystem.service.CashPayment;
+import restaurantmanagementsystem.service.PaymentService;
 
 
 public class RestaurantController {
 
         private Scanner scanner;
+        private Order currentOrder;
+        private PaymentService paymentService;
 
         public RestaurantController() {
             scanner = new Scanner(System.in);
+            paymentService = new PaymentService();
         }
 
         public void start() {
@@ -58,19 +66,28 @@ public class RestaurantController {
 
 
     private void handleShowMenu() {
-        // MenuComponent menu = MenuComponent.getMenu();
-        // menu.display();
-
-        System.out.println("Menu displayed.");
+        MenuComponent menu = MenuComponent.getMenu();
+        menu.display();
     }
 
     private void handleCreateOrder() {
         System.out.println("Creating a new order...");
-        // order.addItem(...)
-        // notify observers (automatic via model)
+        currentOrder = new Order();
+        while (true) {
+            System.out.println("Enter menu item ID to add (0 to finish):");
+            int itemId = readInt();
+            if (itemId == 0) break;
+            currentOrder.addItem(itemId);
+            System.out.println("Item added.");
+        }
     }
 
     private void handlePayment() {
+        if (currentOrder == null) {
+            System.out.println("No active order to pay for.");
+            return;
+        }
+
         System.out.println("Choose payment method:");
         System.out.println("1. Cash");
         System.out.println("2. Card");
@@ -79,16 +96,18 @@ public class RestaurantController {
 
         switch (choice) {
             case 1:
-                // paymentService.setStrategy(new CashPayment());
+                paymentService.setStrategy(new CashPayment());
                 break;
             case 2:
-                // paymentService.setStrategy(new CardPayment());
+                paymentService.setStrategy(new CardPayment());
                 break;
             default:
                 System.out.println("Invalid payment method.");
+                return;
         }
 
-        // paymentService.pay(order);
+        paymentService.pay(currentOrder);
+        currentOrder = null;
     }
 
 }
