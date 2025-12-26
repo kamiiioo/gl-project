@@ -1,4 +1,7 @@
 package restaurantmanagementsystem.model.order;
 
-public class OrderStatus {
+public enum OrderStatus {
+    UNDER_PREPARATION,
+    COOKED,
+    PREPARED
 }
