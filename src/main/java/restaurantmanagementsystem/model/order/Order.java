@@ -11,7 +11,7 @@ public class Order implements Observable {
     private List<Observer> observers = new ArrayList<>();
     
     public Order() {
-        this.status = OrderStatus.PENDING;
+        this.status = OrderStatus.UNDER_PREPARATION;
     }
     
     @Override

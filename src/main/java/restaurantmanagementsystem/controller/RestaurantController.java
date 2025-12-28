@@ -1,21 +1,23 @@
 package restaurantmanagementsystem.controller;
 import java.util.Scanner;
 import restaurantmanagementsystem.model.MenuComponent;
-import restaurantmanagementsystem.model.Order;
-import restaurantmanagementsystem.service.CardPayment;
-import restaurantmanagementsystem.service.CashPayment;
-import restaurantmanagementsystem.service.PaymentService;
+import restaurantmanagementsystem.model.MenuItem;
+import restaurantmanagementsystem.model.core.RestaurantManager;
+import restaurantmanagementsystem.model.order.Order;
+import restaurantmanagementsystem.model.order.OrderStatus;
+import restaurantmanagementsystem.model.payement.Cardpayment;
+import restaurantmanagementsystem.model.payement.Cashpayment;
 
 
 public class RestaurantController {
 
         private Scanner scanner;
-        private Order currentOrder;
-        private PaymentService paymentService;
+        private int currentOrderId = -1;
+        private RestaurantManager restaurantManager;
 
         public RestaurantController() {
             scanner = new Scanner(System.in);
-            paymentService = new PaymentService();
+            restaurantManager = RestaurantManager.getInstance();
         }
 
         public void start() {
@@ -34,6 +36,9 @@ public class RestaurantController {
                         break;
                     case 3:
                         handlePayment();
+                        break;
+                    case 4:
+                        handleUpdateStatus();
                         break;
                     case 0:
                         running = false;
@@ -60,6 +65,7 @@ public class RestaurantController {
         System.out.println("1. Show Menu");
         System.out.println("2. Create Order");
         System.out.println("3. Payment");
+        System.out.println("4. Update Order Status");
         System.out.println("0. Exit");
         System.out.print("Choice: ");
     }
@@ -72,18 +78,20 @@ public class RestaurantController {
 
     private void handleCreateOrder() {
         System.out.println("Creating a new order...");
-        currentOrder = new Order();
+        currentOrderId = restaurantManager.createOrder();
         while (true) {
             System.out.println("Enter menu item ID to add (0 to finish):");
             int itemId = readInt();
             if (itemId == 0) break;
-            currentOrder.addItem(itemId);
+            // Simulating item lookup for the new Order class structure
+            MenuItem item = new MenuItem("Item #" + itemId, 10.0);
+            restaurantManager.addItemToOrder(currentOrderId, item);
             System.out.println("Item added.");
         }
     }
 
     private void handlePayment() {
-        if (currentOrder == null) {
+        if (currentOrderId == -1) {
             System.out.println("No active order to pay for.");
             return;
         }
@@ -96,18 +104,38 @@ public class RestaurantController {
 
         switch (choice) {
             case 1:
-                paymentService.setStrategy(new CashPayment());
+                restaurantManager.processPayment(currentOrderId, new CashPayment());
                 break;
             case 2:
-                paymentService.setStrategy(new CardPayment());
+                restaurantManager.processPayment(currentOrderId, new CardPayment());
                 break;
             default:
                 System.out.println("Invalid payment method.");
                 return;
         }
-
-        paymentService.pay(currentOrder);
-        currentOrder = null;
+        
+        // Reset current order after payment attempt (optional logic, depends on if payment succeeded)
+        // For now, we keep it active until explicitly cleared or new order created
     }
 
+    private void handleUpdateStatus() {
+        if (currentOrderId == -1) {
+            System.out.println("No active order.");
+            return;
+        }
+        Order currentOrder = restaurantManager.getOrderById(currentOrderId);
+        System.out.println(currentOrder);
+        System.out.println("Select new status:");
+        System.out.println("1. UNDER_PREPARATION");
+        System.out.println("2. COOKED");
+        System.out.println("3. PREPARED");
+        
+        int choice = readInt();
+        switch (choice) {
+            case 1: restaurantManager.updateOrderStatus(currentOrderId, OrderStatus.UNDER_PREPARATION); break;
+            case 2: restaurantManager.updateOrderStatus(currentOrderId, OrderStatus.COOKED); break;
+            case 3: restaurantManager.updateOrderStatus(currentOrderId, OrderStatus.PREPARED); break;
+            default: System.out.println("Invalid status selection.");
+        }
+    }
 }
