@@ -1,6 +1,6 @@
 package restaurantmanagementsystem.model.order;
 
-import restaurantmanagementsystem.model.MenuItem;
+import restaurantmanagementsystem.model.menu.MenuItem;
 
 public class OrderItem {
     private MenuItem item; // The link to the Menu class

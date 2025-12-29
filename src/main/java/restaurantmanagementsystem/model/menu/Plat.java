@@ -6,6 +6,7 @@ public class Plat extends MenuComponent {
     private double price;
 
     public Plat(String name, double price) {
+        super(); // Explicitly invoke the superclass constructor
         this.name = name;
         this.price = price;
     }

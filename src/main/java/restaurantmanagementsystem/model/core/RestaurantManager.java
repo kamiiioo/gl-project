@@ -2,17 +2,15 @@ package restaurantmanagementsystem.model.core;
 
 import java.util.HashMap;
 import java.util.Map;
-import restaurantmanagementsystem.model.MenuItem;
+import restaurantmanagementsystem.model.menu.MenuItem;
 import restaurantmanagementsystem.model.order.Order;
 import restaurantmanagementsystem.model.order.OrderStatus;
-import restaurantmanagementsystem.payement.PaymentService;
-import restaurantmanagementsystem.payement.PaymentStrategy;
+import restaurantmanagementsystem.model.payment.PaymentStrategy;
 
 public class RestaurantManager {
     private static RestaurantManager instance;
     
     private Map<Integer, Order> orders;
-    // We track status separately here to enforce rules easily
     private Map<Integer, OrderStatus> orderStatuses; 
     private int nextOrderId;
     
@@ -21,7 +19,6 @@ public class RestaurantManager {
         orders = new HashMap<>();
         orderStatuses = new HashMap<>();
         nextOrderId = 1;
-        
     }
 
     public static synchronized RestaurantManager getInstance() {
@@ -72,10 +69,8 @@ public class RestaurantManager {
             return false;
         }
 
-        // Directly use the strategy pattern
         double total = order.getTotal();
         strategy.pay(total);
         return true;
     }
-
 }

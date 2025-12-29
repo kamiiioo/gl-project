@@ -1,13 +1,13 @@
 package restaurantmanagementsystem.controller;
+
 import java.util.Scanner;
-import restaurantmanagementsystem.model.MenuComponent;
-import restaurantmanagementsystem.model.MenuItem;
+import restaurantmanagementsystem.model.menu.MenuComponent; // From model
+import restaurantmanagementsystem.model.menu.MenuItem; // From model.menu
 import restaurantmanagementsystem.model.core.RestaurantManager;
 import restaurantmanagementsystem.model.order.Order;
 import restaurantmanagementsystem.model.order.OrderStatus;
-import restaurantmanagementsystem.model.payement.Cardpayment;
-import restaurantmanagementsystem.model.payement.Cashpayment;
-
+import restaurantmanagementsystem.model.payment.CardPayment; // Note: "payment" NOT "payement"
+import restaurantmanagementsystem.model.payment.CashPayment; // Note: "payment" NOT "payement"
 
 public class RestaurantController {
 
@@ -40,6 +40,9 @@ public class RestaurantController {
                     case 4:
                         handleUpdateStatus();
                         break;
+                    case 5:
+                        handleSelectOrder();
+                        break;
                     case 0:
                         running = false;
                         System.out.println("Goodbye!");
@@ -66,6 +69,7 @@ public class RestaurantController {
         System.out.println("2. Create Order");
         System.out.println("3. Payment");
         System.out.println("4. Update Order Status");
+        System.out.println("5. Select Existing Order");
         System.out.println("0. Exit");
         System.out.print("Choice: ");
     }
@@ -114,8 +118,8 @@ public class RestaurantController {
                 return;
         }
         
-        // Reset current order after payment attempt (optional logic, depends on if payment succeeded)
-        // For now, we keep it active until explicitly cleared or new order created
+        System.out.println("Payment processed.");
+        currentOrderId = -1; // Reset active order
     }
 
     private void handleUpdateStatus() {
@@ -136,6 +140,17 @@ public class RestaurantController {
             case 2: restaurantManager.updateOrderStatus(currentOrderId, OrderStatus.COOKED); break;
             case 3: restaurantManager.updateOrderStatus(currentOrderId, OrderStatus.PREPARED); break;
             default: System.out.println("Invalid status selection.");
+        }
+    }
+
+    private void handleSelectOrder() {
+        System.out.println("Enter Order ID to select:");
+        int id = readInt();
+        if (restaurantManager.getOrderById(id) != null) {
+            currentOrderId = id;
+            System.out.println("Order #" + id + " is now active.");
+        } else {
+            System.out.println("Order not found.");
         }
     }
 }

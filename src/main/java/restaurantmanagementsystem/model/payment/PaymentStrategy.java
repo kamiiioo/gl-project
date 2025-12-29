@@ -1,4 +1,4 @@
-package restaurantmanagementsystem.model.payement;
+package restaurantmanagementsystem.model.payment;
 
 
 public interface PaymentStrategy {

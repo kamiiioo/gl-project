@@ -3,7 +3,10 @@ package restaurantmanagementsystem.model.order;
 
 import java.util.ArrayList;
 import java.util.List;
-import restaurantmanagementsystem.model.MenuItem;
+import restaurantmanagementsystem.model.menu.MenuItem; // Fixed import
+import restaurantmanagementsystem.observer.Observable; // Add this import
+import restaurantmanagementsystem.observer.Observer; // Add this import
+
 
 public class Order implements Observable {
     private List<OrderItem> items = new ArrayList<>();

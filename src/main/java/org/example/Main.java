@@ -1,8 +1,5 @@
 package org.example;
 
-
-
-
 import restaurantmanagementsystem.controller.RestaurantController;
 
 public class Main {
