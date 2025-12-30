@@ -5,19 +5,17 @@ import java.util.List;
 public class ConsoleMenuView {
 
     public void afficherMenu(List<String> menuItems) {
-        System.out.println("=== MENU DU RESTAURANT ===");
-
-        if (menuItems == null || menuItems.isEmpty()) {
-            System.out.println("Aucun plat disponible.");
-            return;
-        }
-
+        System.out.println("=== MENU ===");
         for (String item : menuItems) {
-            System.out.println("- " + item);
+            System.out.println(item);
         }
     }
 
     public void afficherMessage(String message) {
         System.out.println("[INFO] " + message);
+    }
+    
+    public void afficherErreur(String erreur) {
+        System.err.println("[ERREUR] " + erreur);
     }
 }

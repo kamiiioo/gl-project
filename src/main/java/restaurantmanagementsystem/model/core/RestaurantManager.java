@@ -6,7 +6,18 @@ import restaurantmanagementsystem.model.menu.MenuItem;
 import restaurantmanagementsystem.model.order.Order;
 import restaurantmanagementsystem.model.order.OrderStatus;
 import restaurantmanagementsystem.model.payment.PaymentStrategy;
-
+/**
+ * Gestionnaire central du restaurant (Singleton).
+ * Garantit une seule instance pour gérer l'état global.
+ * 
+ * Design Pattern: Singleton
+ * 
+ * Responsabilités:
+ * - Gérer toutes les commandes
+ * - Coordonner les opérations de paiement
+ * - Maintenir l'état des commandes
+ * - Appliquer les règles métier
+ */
 public class RestaurantManager {
     private static RestaurantManager instance;
     
@@ -60,12 +71,12 @@ public class RestaurantManager {
         Order order = orders.get(orderId);
         
         if (order == null) {
-            System.out.println("Payment failed: Order not found.");
+           
             return false;
         }
         
         if (currentStatus != OrderStatus.PREPARED) {
-            System.out.println("Payment failed: Order is not ready (Current status: " + currentStatus + ").");
+            
             return false;
         }
 

@@ -17,11 +17,11 @@ public class CardPayment implements PaymentStrategy {
         double total = calculateTotal(amount);
 
         System.out.println("══════════════════════════════");
-        System.out.println("💳 MODE DE PAIEMENT : CARTE");
+        System.out.println("MODE DE PAIEMENT : CARTE");
         System.out.println("══════════════════════════════");
         System.out.println("Montant initial : " + DF.format(amount) + " DA");
         System.out.println("Frais carte (2%) : " + DF.format(amount * CARD_FEE) + " DA");
-        System.out.println("➡️ Montant final : " + DF.format(total) + " DA");
+        System.out.println("Montant final : " + DF.format(total) + " DA");
         System.out.println("Paiement effectué avec succès ✔");
         System.out.println("══════════════════════════════");
     }

@@ -18,11 +18,11 @@ public class CashPayment implements PaymentStrategy {
         double total = calculateTotal(amount);
 
         System.out.println("══════════════════════════════");
-        System.out.println("💵 MODE DE PAIEMENT : ESPÈCES");
+        System.out.println("MODE DE PAIEMENT : ESPÈCES");
         System.out.println("══════════════════════════════");
         System.out.println("Montant initial : " + DF.format(amount) + " DA");
         System.out.println("Réduction cash (5%) : -" + DF.format(amount * DISCOUNT) + " DA");
-        System.out.println("➡️ Montant final : " + DF.format(total) + " DA");
+        System.out.println("Montant final : " + DF.format(total) + " DA");
         System.out.println("Paiement effectué avec succès ✔");
         System.out.println("══════════════════════════════");
     }
