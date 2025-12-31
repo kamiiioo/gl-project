@@ -47,6 +47,12 @@ public class RestaurantManager {
         return id;
     }
 
+    public void removeOrder(int orderId) {
+        orders.remove(orderId);
+        orderStatuses.remove(orderId);
+    }
+
+
     public Order getOrderById(int id) {
         return orders.get(id);
     }
