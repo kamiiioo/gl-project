@@ -42,6 +42,7 @@ public class RestaurantController {
         menuView = new ConsoleMenuView();
     }
 
+
    public void start() {
         boolean running = true;
         while (running) {
@@ -66,14 +67,17 @@ public class RestaurantController {
         scanner.close();
     }
 
-
     private int readInt() {
-        while (!scanner.hasNextInt()) {
-            consoleView.afficherErreur("Veuillez entrer un nombre valide:");
-            scanner.next();
+        while (true) {
+            try {
+                String input = scanner.nextLine().trim();
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                consoleView.afficherErreur("Veuillez entrer un nombre valide.");
+            }
         }
-        return scanner.nextInt();
     }
+
 
     private void handleShowMenu() {
           MenuComponent menu = MenuComponent.getMenu();
@@ -84,7 +88,7 @@ public class RestaurantController {
           System.out.println("\n📋 LISTE DES COMMANDES");
     System.out.println("======================");
     
-    // Check first 10 possible order IDs
+    // Check first 10 possible order IDs (“For simplicity, we limited the display to the first 10 orders.”)
     for (int i = 1; i <= 10; i++) {
         Order order = restaurantManager.getOrderById(i);
         if (order != null) {
@@ -103,21 +107,30 @@ public class RestaurantController {
     private void handleCreateOrder() {
         consoleView.afficherMessage("Création d'une nouvelle commande...");
         currentOrderId = restaurantManager.createOrder();
-        
+
+        boolean itemAdded = false;
+
         while (true) {
             consoleView.afficherPrompt("Entrez l'ID de l'article à ajouter (0 pour terminer):");
             int itemId = readInt();
             if (itemId == 0) break;
-            
-            // Create a simple menu item based on ID
+
             MenuItem item = createMenuItemById(itemId);
             if (item != null) {
                 restaurantManager.addItemToOrder(currentOrderId, item);
+                itemAdded = true;
                 consoleView.afficherMessage("Article ajouté.");
             } else {
                 consoleView.afficherErreur("ID d'article invalide.");
             }
         }
+
+        if (!itemAdded) {
+            consoleView.afficherErreur("Commande vide annulée.");
+            restaurantManager.removeOrder(currentOrderId); // if implemented
+            currentOrderId = -1;
+        }
+
     }
 
     private MenuItem createMenuItemById(int itemId) {
